@@ -68,7 +68,7 @@ public class AssetController {
     public Asset deleteAsset(@PathVariable("id") Integer assetId) throws AssetNotFoundException, DeleteAllottedAssetException {
         return assetService.deleteAsset(assetId);
     }
-    @CrossOrigin
+    @CrossOrigin("http://localhost:4200")
     @GetMapping(
             value = "/report"
     )
