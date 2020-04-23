@@ -72,7 +72,7 @@ public class AssetServiceImpl implements AssetService {
 		List<String[]> assetData = new ArrayList<>();
 		allAssets.forEach(asset->
 				assetData.add(new String[]{asset.getAssetId().toString(),asset.getAssetName(),asset.getAssetDescription(),
-				asset.getAssetCategory(),asset.getAvailability(),asset.getAllottedTo().getEmployeeId().toString()}));
+				asset.getAssetCategory(),asset.getAvailability(),asset.getAllottedTo()!= null?asset.getAllottedTo().getEmployeeId().toString():""}));
 		for(String[] asset:assetData){
 			colnum=0;
 			row = sheet.createRow(rownum++);
