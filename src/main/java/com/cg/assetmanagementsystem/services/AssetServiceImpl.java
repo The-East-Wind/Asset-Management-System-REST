@@ -49,4 +49,9 @@ public class AssetServiceImpl implements AssetService {
 		modifiedAsset.setAssetId(originalAsset.getAssetId());
 		return assetDAO.save(modifiedAsset);
 	}
+
+	@Override
+	public boolean generateAssetReport() {
+		return false;
+	}
 }

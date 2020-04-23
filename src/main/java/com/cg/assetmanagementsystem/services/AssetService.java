@@ -12,4 +12,5 @@ public interface AssetService {
 	List<Asset> getAllAssets();
     Asset getAssetWithId(int assetId) throws AssetNotFoundException;
 	Asset modifyAssetWithId(int assetID, Asset modifiedAsset) throws AssetNotFoundException;
+	boolean generateAssetReport();
 }

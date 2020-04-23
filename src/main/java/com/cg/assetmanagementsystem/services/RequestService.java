@@ -13,4 +13,6 @@ public interface RequestService {
     List<Request> getPendingRequests();
 
     Request updateRequest(Integer requestId, Request updatedRequest) throws RequestNotFoundException;
+
+    boolean generateRequestReport();
 }

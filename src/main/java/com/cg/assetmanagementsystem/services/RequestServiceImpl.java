@@ -42,4 +42,9 @@ public class RequestServiceImpl implements RequestService {
         return requestDAO.save(updatedRequest);
     }
 
+    @Override
+    public boolean generateRequestReport() {
+        return false;
+    }
+
 }
