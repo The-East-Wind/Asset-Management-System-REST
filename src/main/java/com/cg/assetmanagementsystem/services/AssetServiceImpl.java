@@ -4,12 +4,18 @@ import com.cg.assetmanagementsystem.daos.AssetDAO;
 import com.cg.assetmanagementsystem.entities.Asset;
 import com.cg.assetmanagementsystem.exceptions.AssetNotFoundException;
 import com.cg.assetmanagementsystem.exceptions.DeleteAllottedAssetException;
+import com.cg.assetmanagementsystem.exceptions.ReportGenerationException;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.io.*;
+import java.util.*;
 import java.util.stream.Collectors;
+
 
 @Service
 public class AssetServiceImpl implements AssetService {
@@ -51,7 +57,41 @@ public class AssetServiceImpl implements AssetService {
 	}
 
 	@Override
-	public boolean generateAssetReport() {
-		return false;
+	public ByteArrayInputStream generateAssetReport() throws ReportGenerationException{
+		Iterable<Asset> allAssets = assetDAO.findAll();
+		XSSFWorkbook workbook = new XSSFWorkbook();
+		XSSFSheet sheet = workbook.createSheet("Asset Details");
+		String headerRow[] = new String[]{"Id","Name","Description","Category","Availability","Allotted To"};
+		Row row = sheet.createRow(0);
+		int colnum=0;
+		for(String header: headerRow){
+			Cell cell = row.createCell(colnum++);
+			cell.setCellValue(header);
+		}
+		int rownum = 1;
+		List<String[]> assetData = new ArrayList<>();
+		allAssets.forEach(asset->
+				assetData.add(new String[]{asset.getAssetId().toString(),asset.getAssetName(),asset.getAssetDescription(),
+				asset.getAssetCategory(),asset.getAvailability(),asset.getAllottedTo().getEmployeeId().toString()}));
+		for(String[] asset:assetData){
+			colnum=0;
+			row = sheet.createRow(rownum++);
+			for(String data:asset){
+				Cell cell = row.createCell(colnum++);
+				cell.setCellValue(data);
+			}
+		}
+		ByteArrayOutputStream bos;
+		byte[] byteArrayData;
+		try {
+			bos = new ByteArrayOutputStream();
+			workbook.write(bos);
+			byteArrayData = bos.toByteArray();
+			bos.close();
+		}
+		catch(IOException exception){
+			throw new ReportGenerationException("An error occurred when generating Asset Report",exception);
+		}
+		return new ByteArrayInputStream(byteArrayData);
 	}
 }

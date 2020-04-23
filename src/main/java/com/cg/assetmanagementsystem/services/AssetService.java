@@ -3,7 +3,9 @@ package com.cg.assetmanagementsystem.services;
 import com.cg.assetmanagementsystem.entities.Asset;
 import com.cg.assetmanagementsystem.exceptions.AssetNotFoundException;
 import com.cg.assetmanagementsystem.exceptions.DeleteAllottedAssetException;
+import com.cg.assetmanagementsystem.exceptions.ReportGenerationException;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
 
 public interface AssetService {
@@ -12,5 +14,5 @@ public interface AssetService {
 	List<Asset> getAllAssets();
     Asset getAssetWithId(int assetId) throws AssetNotFoundException;
 	Asset modifyAssetWithId(int assetID, Asset modifiedAsset) throws AssetNotFoundException;
-	boolean generateAssetReport();
+	ByteArrayInputStream generateAssetReport() throws ReportGenerationException;
 }
