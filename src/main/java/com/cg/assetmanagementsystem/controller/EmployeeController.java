@@ -8,17 +8,16 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/employees")
+@CrossOrigin(origins = "http://localhost:4200")
 public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
 
-    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping(
             value="/{id}",
             produces = "application/json",
             headers = "Accept=application/json"
     )
-    @ResponseBody
     public Employee getEmployeeWithId(@PathVariable("id") Integer employeeId) throws EmployeeNotFoundException {
         return employeeService.getEmployeeWithId(employeeId);
     }

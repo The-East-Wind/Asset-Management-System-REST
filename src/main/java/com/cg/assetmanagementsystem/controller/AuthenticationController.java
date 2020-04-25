@@ -10,15 +10,14 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value="/login")
+@CrossOrigin(origins = "http://localhost:4200")
 public class AuthenticationController {
     @Autowired
     private LoginService loginService;
-    @CrossOrigin(origins = "http://localhost:4200")
     @PostMapping(
             headers = "Accept=application/json",
             produces = "application/json"
     )
-    @ResponseBody
     public Employee authenticateUser(@RequestBody Credential enteredCredentials) throws LoginException, EmployeeNotFoundException {
         return loginService.authenticateUser(enteredCredentials);
     }

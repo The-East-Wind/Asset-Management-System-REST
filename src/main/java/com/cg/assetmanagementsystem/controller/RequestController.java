@@ -23,7 +23,6 @@ public class RequestController {
             produces = "application/json",
             headers = "Accept=application/json"
     )
-    @ResponseBody
     public List<Request> getPendingRequests(){
         return requestService.getPendingRequests();
     }
@@ -33,7 +32,6 @@ public class RequestController {
             produces = "application/json",
             headers = "Accept=application/json"
     )
-    @ResponseBody
     public Request getRequestWithId(@PathVariable("id") Integer requestId) throws RequestNotFoundException {
         return requestService.getRequestWithId(requestId);
     }
@@ -42,7 +40,6 @@ public class RequestController {
             headers = "Accept=application/json",
             produces = "application/json"
     )
-    @ResponseBody
     public Request addNewRequest(@RequestBody Request newRequest){
         return requestService.addNewRequest(newRequest);
     }
@@ -52,7 +49,6 @@ public class RequestController {
             headers = "Accept=application/json",
             produces = "application/json"
     )
-    @ResponseBody
     public Request updateRequest(@PathVariable("id") Integer requestId, @RequestBody Request updatedRequest) throws RequestNotFoundException {
         return requestService.updateRequest(requestId,updatedRequest);
     }
