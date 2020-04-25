@@ -73,7 +73,7 @@ public class RequestServiceImpl implements RequestService {
                 request.getRequestedAsset().getAssetId().toString(),
                 request.getStatus()
         }));
-        int rownum = 0;
+        int rownum = 1;
         for(String[] request:requestData){
             cellnum = 0;
             row = sheet.createRow(rownum++);

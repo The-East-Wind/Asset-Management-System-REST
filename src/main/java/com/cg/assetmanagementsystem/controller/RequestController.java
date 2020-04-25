@@ -59,7 +59,7 @@ public class RequestController {
     public ResponseEntity<InputStreamResource> getRequestReport() throws ReportGenerationException {
         ByteArrayInputStream in = requestService.generateRequestReport();
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Disposition","attachment; filename=request_report.xlxs");
+        headers.add("Content-Disposition","attachment; filename=request_report.xlsx");
         return ResponseEntity.ok().headers(headers).body(new InputStreamResource(in));
     }
 }
