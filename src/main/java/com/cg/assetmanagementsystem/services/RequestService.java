@@ -1,8 +1,10 @@
 package com.cg.assetmanagementsystem.services;
 
 import com.cg.assetmanagementsystem.entities.Request;
+import com.cg.assetmanagementsystem.exceptions.ReportGenerationException;
 import com.cg.assetmanagementsystem.exceptions.RequestNotFoundException;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
 
 public interface RequestService {
@@ -14,5 +16,5 @@ public interface RequestService {
 
     Request updateRequest(Integer requestId, Request updatedRequest) throws RequestNotFoundException;
 
-    boolean generateRequestReport();
+    ByteArrayInputStream generateRequestReport() throws ReportGenerationException;
 }

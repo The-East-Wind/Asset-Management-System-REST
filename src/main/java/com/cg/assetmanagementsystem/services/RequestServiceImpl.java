@@ -2,10 +2,19 @@ package com.cg.assetmanagementsystem.services;
 
 import com.cg.assetmanagementsystem.daos.RequestDAO;
 import com.cg.assetmanagementsystem.entities.Request;
+import com.cg.assetmanagementsystem.exceptions.ReportGenerationException;
 import com.cg.assetmanagementsystem.exceptions.RequestNotFoundException;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -43,8 +52,48 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public boolean generateRequestReport() {
-        return false;
+    public ByteArrayInputStream generateRequestReport() throws ReportGenerationException {
+        Iterable<Request> requests = requestDAO.findAll();
+        String[] headers = new String[]{"Id","Requested From","Requested Till","Requested By","Requested For","Requested Asset","Status"};
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        XSSFSheet sheet = workbook.createSheet("Request Details");
+        Row row = sheet.createRow(0);
+        int cellnum = 0;
+        for(String header:headers){
+            Cell cell = row.createCell(cellnum++);
+            cell.setCellValue(header);
+        }
+        List<String[]> requestData = new ArrayList<>();
+        requests.forEach(request -> requestData.add(new String[]{
+                request.getRequestId().toString(),
+                request.getFromDate().toString(),
+                request.getToDate().toString(),
+                request.getRequestedBy().getEmployeeId().toString(),
+                request.getRequestedFor().getEmployeeId().toString(),
+                request.getRequestedAsset().getAssetId().toString(),
+                request.getStatus()
+        }));
+        int rownum = 0;
+        for(String[] request:requestData){
+            cellnum = 0;
+            row = sheet.createRow(rownum++);
+            for(String cellData:request){
+                Cell cell = row.createCell(cellnum++);
+                cell.setCellValue(cellData);
+            }
+        }
+        ByteArrayOutputStream bos;
+        byte[] byteArrayData;
+        try{
+            bos = new ByteArrayOutputStream();
+            workbook.write(bos);
+            byteArrayData = bos.toByteArray();
+            bos.close();
+        }
+        catch (IOException exception){
+            throw new ReportGenerationException("Error! Report generation failed",exception);
+        }
+        return new ByteArrayInputStream(byteArrayData);
     }
 
 }

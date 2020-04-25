@@ -61,23 +61,28 @@ public class AssetServiceImpl implements AssetService {
 		Iterable<Asset> allAssets = assetDAO.findAll();
 		XSSFWorkbook workbook = new XSSFWorkbook();
 		XSSFSheet sheet = workbook.createSheet("Asset Details");
-		String headerRow[] = new String[]{"Id","Name","Description","Category","Availability","Allotted To"};
+		String headers[] = new String[]{"Id","Name","Description","Category","Availability","Allotted To"};
 		Row row = sheet.createRow(0);
-		int colnum=0;
-		for(String header: headerRow){
-			Cell cell = row.createCell(colnum++);
+		int cellnum=0;
+		for(String header: headers){
+			Cell cell = row.createCell(cellnum++);
 			cell.setCellValue(header);
 		}
 		int rownum = 1;
 		List<String[]> assetData = new ArrayList<>();
-		allAssets.forEach(asset->
-				assetData.add(new String[]{asset.getAssetId().toString(),asset.getAssetName(),asset.getAssetDescription(),
-				asset.getAssetCategory(),asset.getAvailability(),asset.getAllottedTo()!= null?asset.getAllottedTo().getEmployeeId().toString():""}));
+		allAssets.forEach(asset-> assetData.add(new String[]{
+				asset.getAssetId().toString(),
+				asset.getAssetName(),
+				asset.getAssetDescription(),
+				asset.getAssetCategory(),
+				asset.getAvailability(),
+				asset.getAllottedTo()!= null?asset.getAllottedTo().getEmployeeId().toString():""
+		}));
 		for(String[] asset:assetData){
-			colnum=0;
+			cellnum=0;
 			row = sheet.createRow(rownum++);
 			for(String data:asset){
-				Cell cell = row.createCell(colnum++);
+				Cell cell = row.createCell(cellnum++);
 				cell.setCellValue(data);
 			}
 		}
